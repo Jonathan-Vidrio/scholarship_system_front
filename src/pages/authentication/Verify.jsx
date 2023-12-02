@@ -7,8 +7,8 @@ import {useEffect} from "react";
 const Verify = () => {
     const {
         register,
-            handleSubmit,
-            formState: { errors }
+        handleSubmit,
+        formState: { errors }
     } = useForm();
 
     const {
@@ -53,7 +53,6 @@ const Verify = () => {
                     <TextField
                         variant="outlined"
                         margin="normal"
-                        required
                         fullWidth
                         id="workerId"
                         label="Worker Id"
@@ -71,7 +70,6 @@ const Verify = () => {
                     <TextField
                         variant="outlined"
                         margin="normal"
-                        required
                         fullWidth
                         name="curp"
                         label="CURP"

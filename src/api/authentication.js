@@ -9,6 +9,8 @@ const registerRequest = async (user) => {
         }
     }).then(response => {
         return response.json();
+    }).catch(() => {
+        return { message: 'Connection failed'}
     });
 }
 
@@ -21,6 +23,8 @@ const loginRequest = async (user) => {
         }
     }).then(response => {
         return response.json();
+    }).catch(() => {
+        return { message: 'Connection failed'}
     });
 }
 
@@ -33,6 +37,8 @@ const verifyScholar = async (data) => {
         }
     }).then(response => {
         return response.json();
+    }).catch(() => {
+        return { message: 'Connection failed'}
     });
 }
 

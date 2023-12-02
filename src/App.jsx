@@ -12,7 +12,8 @@ import {useAuthentication} from "./context/AuthenticationContext.jsx";
 import AdminNavbar from "./components/admin/AdminNavbar.jsx";
 import ScholarNavbar from "./components/scholar/ScholarNavbar.jsx";
 import SuperadminNavbar from "./components/admin/SuperadminNavbar.jsx";
-import ScholarRegisterForm from "./pages/scholar/ScholarRegisterForm.jsx";
+import ScholarProfile from "./pages/scholar/ScholarProfile.jsx";
+import ScholarScholarship from "./pages/scholar/ScholarScholarship.jsx";
 
 const App = () => {
     const {user} = useAuthentication();
@@ -38,9 +39,33 @@ const App = () => {
                 <Route path="/register/verify" element={<Verify />} />
 
                 {/* Contenido de admin */}
+                <Route path={"/admin/users"} element={<h1>Users</h1>} />
+                <Route path={"/admin/users/create"} element={<h1>Users/create</h1>} />
+                <Route path={"/admin/users/edit"} element={<h1>Users/edit</h1>} />
+                <Route path={"/admin/users/details"} element={<h1>Users/details</h1>} />
+
+                <Route path={"/admin/scholars"} element={<h1>Scholars</h1>} />
+                <Route path={"/admin/scholars/create"} element={<h1>Scholars/create</h1>} />
+                <Route path={"/admin/scholars/edit"} element={<h1>Scholars/edit</h1>} />
+                <Route path={"/admin/scholars/details"} element={<h1>Scholars/details</h1>} />
+
+                <Route path={"/admin/tutors"} element={<h1>Tutors</h1>} />
+                <Route path={"/admin/tutors/create"} element={<h1>Tutors/create</h1>} />
+                <Route path={"/admin/tutors/edit"} element={<h1>Tutors/edit</h1>} />
+                <Route path={"/admin/tutors/details"} element={<h1>Tutors/details</h1>} />
+
+                <Route path={"/admin/scholarships"} element={<h1>Scholarships</h1>} />
+                <Route path={"/admin/scholarships/create"} element={<h1>Scholarships/create</h1>} />
+                <Route path={"/admin/scholarships/edit"} element={<h1>Scholarships/edit</h1>} />
+                <Route path={"/admin/scholarships/details"} element={<h1>Scholarships/details</h1>} />
+
+                <Route path={"/admin/documents"} element={<h1>Documents</h1>} />
+                <Route path={"/admin/documents/details"} element={<h1>Documents/details</h1>} />
 
                 {/* Contenido de scholar */}
-                <Route path="/scholar" element={<ScholarRegisterForm />} />
+                <Route path="/scholar" element={<ScholarProfile />} />
+                <Route path={"/scholar/profile"} element={<ScholarProfile />} />
+                <Route path={"/scholar/scholarship"} element={<ScholarScholarship />} />
 
                 <Route path="*" element={<h1>Not Found</h1>} />
             </Routes>

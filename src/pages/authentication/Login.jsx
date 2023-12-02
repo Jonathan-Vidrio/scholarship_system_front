@@ -27,18 +27,20 @@ const Login = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (isAuthenticated && (user.roleId === 1 || user.roleId === 2)) {
+            navigate('/admin');
+        } else if (isAuthenticated && user.roleId === 3) {
+            getByUserId(user.id);
+            navigate('/scholar');
+        }
+
         return () => {
             setErrors(null);
         }
-    }, []);
+    }, [isAuthenticated]);
 
     const onSubmit = handleSubmit(async (values) => {
         await sign_in(values);
-        if (isAuthenticated && user.roleId === (1 || 2)) {
-            navigate('/admin/home');
-        } else if (isAuthenticated && user.roleId === 3) {
-            navigate('/scholar');
-        }
     });
 
     return (
@@ -59,6 +61,7 @@ const Login = () => {
                         margin="normal"
                         fullWidth
                         id="email"
+                        type={"email"}
                         label="Email Address"
                         name="email"
                         autoComplete="email"
@@ -80,7 +83,7 @@ const Login = () => {
                         label="Password"
                         type="password"
                         id="password"
-                        autoComplete="current-password"
+                        autoComplete="password"
                         sx={{ mt: 2 }}
                         {...register('password', { required: true })}
                     />

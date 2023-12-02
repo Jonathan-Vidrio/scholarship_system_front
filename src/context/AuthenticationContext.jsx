@@ -11,7 +11,7 @@ const useAuthentication = () => {
     return context;
 }
 
-const AuthenticationProvider = ({children}) => {
+const AuthenticationProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -88,11 +88,11 @@ const AuthenticationProvider = ({children}) => {
         >
             {children}
         </AuthenticationContext.Provider>
-    )
+    );
 }
 
 export {
     AuthenticationContext,
     useAuthentication,
     AuthenticationProvider,
-};
+}

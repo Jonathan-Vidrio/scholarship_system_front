@@ -1,18 +1,11 @@
-import {
-    Box,
-    Button,
-    Container, Divider,
-    Paper,
-    TextField,
-    Typography
-} from "@mui/material";
+import {Box, Button, Container, Divider, Paper, TextField, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useAuthentication} from "../../context/AuthenticationContext.jsx";
 import {useNavigate} from "react-router-dom";
 import {useScholar} from "../../context/ScholarContext.jsx";
 
-const ScholarRegisterForm = () => {
+const ScholarProfile = () => {
     const [isPersonalInfoEditable, setPersonalInfoEditable] = useState(false);
     const [showButtons, setShowButtons] = useState(false);
 
@@ -29,6 +22,7 @@ const ScholarRegisterForm = () => {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm();
 
@@ -47,8 +41,15 @@ const ScholarRegisterForm = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isAuthenticated || user.roleId === (1 || 2)) {
+        if (!isAuthenticated || user.roleId !== 3) {
             navigate('*');
+        }
+
+        if (scholar) {
+            setValue('name', scholar.name);
+            setValue('firstLastName', scholar.firstLastName);
+            setValue('secondLastName', scholar.secondLastName);
+            setValue('birthDate', scholar.birthDate);
         }
 
         return () => {
@@ -91,7 +92,7 @@ const ScholarRegisterForm = () => {
                         margin="normal"
                         fullWidth
                         id="name"
-                        label={scholar.name}
+                        label={"Name"}
                         name="name"
                         autoComplete="name"
                         autoFocus
@@ -109,7 +110,7 @@ const ScholarRegisterForm = () => {
                         margin="normal"
                         fullWidth
                         id="firstLastName"
-                        label={scholar.firstLastName}
+                        label={"First Last Name"}
                         name="lastname"
                         autoComplete="lastname"
                         autoFocus
@@ -127,7 +128,7 @@ const ScholarRegisterForm = () => {
                         margin="normal"
                         fullWidth
                         id="secondLastName"
-                        label={scholar.secondLastName}
+                        label={"Second Last Name"}
                         name="lastname"
                         autoComplete="lastname"
                         autoFocus
@@ -145,7 +146,7 @@ const ScholarRegisterForm = () => {
                         margin={"normal"}
                         fullWidth
                         id={"curp"}
-                        label={scholar.curp}
+                        label={"CURP"}
                         name={"curp"}
                         autoComplete={"curp"}
                         autoFocus
@@ -155,20 +156,15 @@ const ScholarRegisterForm = () => {
                         variant={"outlined"}
                         margin={"normal"}
                         fullWidth
-                        id={"birthdate"}
-                        label={scholar.birthdate}
-                        name={"birthdate"}
-                        autoComplete={"birthdate"}
+                        id={"birthDate"}
+                        label={"Birth Date"}
+                        type={"date"}
+                        name={"birthDate"}
+                        autoComplete={"birthDate"}
                         autoFocus
                         disabled={!isPersonalInfoEditable}
-                        {...register('birthdate', { required: true })}
+                        {...register('birthDate', { required: true })}
                     />
-                    {
-                        errors.birthdate &&
-                        <Typography variant="body2" color="red">
-                            This field is required
-                        </Typography>
-                    }
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', gap: 2 }}>
                         <Button
                             variant="contained"
@@ -257,4 +253,4 @@ const ScholarRegisterForm = () => {
     );
 }
 
-export default ScholarRegisterForm;
+export default ScholarProfile;
