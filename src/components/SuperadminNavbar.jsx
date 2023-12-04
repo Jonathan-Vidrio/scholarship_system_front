@@ -1,8 +1,8 @@
-import {AppBar, Button, Grid, Toolbar, Typography} from "@mui/material";
+import {useAuthentication} from "../context/AuthenticationContext.jsx";
 import {Link, useNavigate} from "react-router-dom";
-import {useAuthentication} from "../../context/AuthenticationContext.jsx";
+import {AppBar, Button, Grid, Toolbar, Typography} from "@mui/material";
 
-const ScholarNavbar = () => {
+const SuperadminNavbar = () => {
     const {
         logout,
     } = useAuthentication();
@@ -19,8 +19,10 @@ const ScholarNavbar = () => {
             <Toolbar>
                 <Grid container justifyContent="space-between" alignItems="center">
                     <Grid item>
-                        <Button color="inherit" component={Link} to={"/scholar/profile"}>Profile</Button>
-                        <Button color="inherit" component={Link} to="/scholar/scholarchip">About</Button>
+                        <Button color="inherit" component={Link} to={"/admin/users"}>Users</Button>
+                        <Button color="inherit" component={Link} to="/admin/scholars">Scholars</Button>
+                        <Button color="inherit" component={Link} to="/admin/tutors">Tutors</Button>
+                        <Button color="inherit" component={Link} to="/admin/scholarchips">Scholarships</Button>
                     </Grid>
                     <Grid item>
                         <Typography variant="h6" color="inherit" component="div">
@@ -28,7 +30,7 @@ const ScholarNavbar = () => {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Button color="inherit" component={Link} to="/login" onClick={onLogout}>Logout</Button>
+                        <Button color="inherit" component={Link} to="/signin" onClick={onLogout}>Sign Out</Button>
                     </Grid>
                 </Grid>
             </Toolbar>
@@ -36,4 +38,4 @@ const ScholarNavbar = () => {
     );
 }
 
-export default ScholarNavbar;
+export default SuperadminNavbar;

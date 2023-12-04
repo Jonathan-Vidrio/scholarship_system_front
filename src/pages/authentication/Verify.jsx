@@ -23,7 +23,7 @@ const Verify = () => {
 
     useEffect(() => {
         if (isVerified) {
-            navigate('/register');
+            navigate('/signup');
             setIsVerified(true);
         }
 
@@ -38,65 +38,68 @@ const Verify = () => {
     });
 
     return (
-        <Container component="main" maxWidth="xs" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', justifyContent: 'center' }}>
-            <Paper elevation={6} sx={{ padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                <Typography component="h1" variant="h5" gutterBottom>
-                    Verify Register
-                </Typography>
+        <Container component="main" maxWidth="xs" sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            height: '100vh',
+            justifyContent: 'center',
+            padding: 4 // Adjust padding as needed
+        }}>
+            <Typography component="h1" variant="h5" gutterBottom>
+                Verify Register
+            </Typography>
+            {
+                VerifyErrors &&
+                <Alert severity="error" sx={{ mb: 2, width: '100%' }}>
+                    {VerifyErrors}
+                </Alert>
+            }
+            <form onSubmit={onSubmit}>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    id="workerId"
+                    label="Worker Id"
+                    name="workerId"
+                    autoFocus
+                    sx={{ mt: 2 }}
+                    {...register('workerId', { required: true })}
+                />
                 {
-                    VerifyErrors &&
-                    <Alert severity="error" sx={{ mb: 2 }}>
-                        {VerifyErrors}
-                    </Alert>
+                    errors.workerId &&
+                    <Typography variant="body2" color="red">
+                        This field is required
+                    </Typography>
                 }
-                <form onSubmit={onSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="workerId"
-                        label="Worker Id"
-                        name="workerId"
-                        autoFocus
-                        sx={{ mt: 2 }}
-                        {...register('workerId', { required: true })}
-                    />
-                    {
-                        errors.email &&
-                        <Typography variant="body2" color="red">
-                            This field is required
-                        </Typography>
-                    }
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        name="curp"
-                        label="CURP"
-                        id="curp"
-                        sx={{ mt: 2 }}
-                        {...register('curp', { required: true })}
-                    />
-                    {
-                        errors.password &&
-                        <Typography variant="body2" color="red">
-                            This field is required
-                        </Typography>
-                    }
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        sx={{ mt: 2 }}
-                    >
-                        Verify
-                    </Button>
-                </form>
-            </Paper>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    name="curp"
+                    label="CURP"
+                    id="curp"
+                    sx={{ mt: 2 }}
+                    {...register('curp', { required: true })}
+                />
+                {
+                    errors.curp &&
+                    <Typography variant="body2" color="red">
+                        This field is required
+                    </Typography>
+                }
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, bgcolor: 'primary.main' }} // Adjust the bgcolor to match the design
+                >
+                    Verify
+                </Button>
+            </form>
         </Container>
     );
-
 }
 
 export default Verify;

@@ -1,11 +1,11 @@
-const API_URL = 'https://scholarship-system-80b8c2223eed.herokuapp.com/api/scholars/';
+const API_URL = 'https://scholarship-system-80b8c2223eed.herokuapp.com/api/users/';
 
-const getAllScholars = async (token) => {
+const getAllUsers = async (token) => {
     return fetch(API_URL, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -14,11 +14,12 @@ const getAllScholars = async (token) => {
     });
 }
 
-const getDisabledScholars = async (token) => {
+const getDisabledUsers = async (token) => {
     return fetch(API_URL + '/disabled', {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -27,11 +28,12 @@ const getDisabledScholars = async (token) => {
     });
 }
 
-const getScholarsByFilter = async (filter, token) => {
+const getUsersByFilter = async (filter, token) => {
     return fetch(API_URL + '/filter' + filter, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -40,11 +42,12 @@ const getScholarsByFilter = async (filter, token) => {
     });
 }
 
-const getScholarByTutorId = async (tutorId, token) => {
-    return fetch(API_URL + '/tutor/' + tutorId, {
+const getUsersByRole = async (role, token) => {
+    return fetch(API_URL + '/role/' + role, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -53,11 +56,12 @@ const getScholarByTutorId = async (tutorId, token) => {
     });
 }
 
-const getScholarById = async (scholarId, token) => {
-    return fetch(API_URL + scholarId, {
+const getUserById = async (userId, token) => {
+    return fetch(API_URL + userId, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -66,11 +70,12 @@ const getScholarById = async (scholarId, token) => {
     });
 }
 
-const getScholarByCurp = async (curp, token) => {
-    return fetch(API_URL + '/curp/' + curp, {
+const getUserByEmail = async (email, token) => {
+    return fetch(API_URL + '/email/' + email, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -79,26 +84,13 @@ const getScholarByCurp = async (curp, token) => {
     });
 }
 
-const getScholarByUserId = async (userId, token) => {
-    return fetch(API_URL + '/user/' + userId, {
-        method: 'GET',
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-        }
-    }).then(response => {
-        return response.json();
-    }).catch(() => {
-        return { message: 'Connection failed' }
-    });
-}
-
-const postScholar = async (scholar) => {
+const postUser = async (user, token) => {
     return fetch(API_URL, {
         method: 'POST',
-        body: JSON.stringify(scholar),
+        body: JSON.stringify(user),
         headers: {
-        'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -107,13 +99,13 @@ const postScholar = async (scholar) => {
     });
 }
 
-const putScholar = async (id, scholar, token) => {
-    return fetch(API_URL + id, {
+const putUser = async (user, token) => {
+    return fetch(API_URL + user._id, {
         method: 'PUT',
-        body: JSON.stringify(scholar),
+        body: JSON.stringify(user),
         headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
         }
     }).then(response => {
         return response.json();
@@ -122,11 +114,12 @@ const putScholar = async (id, scholar, token) => {
     });
 }
 
-const disableScholar = async (scholarId) => {
-    return fetch(API_URL + '/disable/' + scholarId, {
+const disableUser = async (userId, token) => {
+    return fetch(API_URL + userId + '/disable', {
         method: 'DELETE',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
         }
     }).then(response => {
         return response.json();
@@ -135,11 +128,12 @@ const disableScholar = async (scholarId) => {
     });
 }
 
-const enableScholar = async (scholarId) => {
-    return fetch(API_URL + '/enable/' + scholarId, {
+const enableUser = async (userId, token) => {
+    return fetch(API_URL + userId + '/enable', {
         method: 'PATCH',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
         }
     }).then(response => {
         return response.json();
@@ -148,11 +142,12 @@ const enableScholar = async (scholarId) => {
     });
 }
 
-const deleteScholar = async (scholarId) => {
-    return fetch(API_URL + scholarId, {
+const removeUser = async (userId, token) => {
+    return fetch(API_URL + userId, {
         method: 'DELETE',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
         }
     }).then(response => {
         return response.json();
@@ -162,16 +157,15 @@ const deleteScholar = async (scholarId) => {
 }
 
 export {
-    getAllScholars,
-    getDisabledScholars,
-    getScholarsByFilter,
-    getScholarByTutorId,
-    getScholarById,
-    getScholarByUserId,
-    getScholarByCurp,
-    postScholar,
-    putScholar,
-    disableScholar,
-    enableScholar,
-    deleteScholar
+    getAllUsers,
+    getDisabledUsers,
+    getUsersByFilter,
+    getUsersByRole,
+    getUserById,
+    getUserByEmail,
+    postUser,
+    putUser,
+    disableUser,
+    enableUser,
+    removeUser
 }

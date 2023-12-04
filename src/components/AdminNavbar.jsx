@@ -1,6 +1,6 @@
 import {AppBar, Button, Grid, Toolbar, Typography} from "@mui/material";
 import {Link, useNavigate} from "react-router-dom";
-import {useAuthentication} from "../../context/AuthenticationContext.jsx";
+import {useAuthentication} from "../context/AuthenticationContext.jsx";
 
 const AdminNavbar = () => {
     const {
@@ -29,7 +29,7 @@ const AdminNavbar = () => {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Button color="inherit" component={Link} to="/login" onClick={onLogout}>Logout</Button>
+                        <Button color="inherit" component={Link} to="/signin" onClick={onLogout}>Sign Out</Button>
                     </Grid>
                 </Grid>
             </Toolbar>

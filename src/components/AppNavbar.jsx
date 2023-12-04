@@ -17,7 +17,7 @@ const AppNavbar = () => {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Button color="inherit" component={Link} to="/login">Login</Button>
+                        <Button color="inherit" component={Link} to="/signin">Sign In</Button>
                     </Grid>
                 </Grid>
             </Toolbar>

@@ -24,9 +24,9 @@ const ScholarProvider = ({children}) => {
     const [scholar, setScholar] = useState(null);
     const [errors, setErrors] = useState(null);
 
-    const getAll = async () => {
+    const getAll = async (token) => {
         try {
-            const res = await getAllScholars();
+            const res = await getAllScholars(token);
             if (res) {
                 setScholars(res);
             } else {
@@ -89,11 +89,10 @@ const ScholarProvider = ({children}) => {
         }
     }
 
-    const getByUserId = async (id) => {
+    const getByUserId = async (id, token) => {
         try {
-            const res = await getScholarByUserId(id);
-            console.log(res);
-            if (res) {
+            const res = await getScholarByUserId(id, token);
+            if (res[0]) {
                 setScholar(res[0]);
             } else {
                 setErrors(res.message);
@@ -129,11 +128,12 @@ const ScholarProvider = ({children}) => {
         }
     }
 
-    const put = async (id, values) => {
+    const put = async (id, values, token) => {
         try {
-            const res = await putScholar(id, values);
+            const res = await putScholar(id, values, token);
+            console.log(res);
             if (res) {
-                setScholar(res.data);
+                setScholar(res);
             } else {
                 setErrors(res.message);
             }
@@ -145,7 +145,7 @@ const ScholarProvider = ({children}) => {
     const disable = async (id) => {
         try {
             const res = await disableScholar(id);
-            if (res.data) {
+            if (res) {
                 setScholar(null);
             } else {
                 setErrors(res.message);

@@ -1,4 +1,4 @@
-import {Box, Button, Container, Divider, Paper, TextField, Typography} from "@mui/material";
+import {Alert, Box, Button, Container, Divider, Paper, TextField, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useAuthentication} from "../../context/AuthenticationContext.jsx";
@@ -17,17 +17,21 @@ const ScholarProfile = () => {
     const handleCancel = () => {
         setPersonalInfoEditable(!isPersonalInfoEditable);
         setShowButtons(false);
+        setErrors(null);
+        setValues();
+        setErrors(null);
     }
 
     const {
         register,
         handleSubmit,
         setValue,
-        formState: { errors },
+        formState: {errors},
     } = useForm();
 
     const {
         user,
+        token,
         isAuthenticated,
     } = useAuthentication();
 
@@ -38,219 +42,216 @@ const ScholarProfile = () => {
         put,
     } = useScholar();
 
+    const setValues = () => {
+        if (scholar) {
+            setValue('name', scholar.name);
+            setValue('firstLastName', scholar.firstLastName);
+            setValue('secondLastName', scholar.secondLastName);
+            setValue('curp', scholar.curp);
+        }
+    }
+
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!isAuthenticated || user.roleId !== 3) {
             navigate('*');
-        }
-
-        if (scholar) {
-            setValue('name', scholar.name);
-            setValue('firstLastName', scholar.firstLastName);
-            setValue('secondLastName', scholar.secondLastName);
-            setValue('birthDate', scholar.birthDate);
+        } else {
+            setValues();
         }
 
         return () => {
             setErrors(null);
         }
-    }, []);
+    }, [isAuthenticated, user, scholar]);
 
     const onSubmit = handleSubmit(async (values) => {
-        await put(scholar.id, values);
+        await put(scholar.id, values, token);
+        setPersonalInfoEditable(false);
+        setShowButtons(false);
     });
 
     return (
-        <Container component="main" maxWidth="sm" sx={{  mt: 8, justifyContent: 'left' }}>
-            {/* Scholar Register Form */}
-            <Paper style={{ padding: 20, marginTop: 20 }}>
-                <Box sx={{ mb: 4 }}>
-                <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="h6" gutterBottom>
-                        Personal Information
-                    </Typography>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        onClick={togglePersonalInfoEditable}
-                    >
-                        Edit
-                    </Button>
-                </Box>
-                    {
-                        ScholarErrors &&
-                        <Typography variant="body2" color="red">
-                            {ScholarErrors}
+        <Container component="main" maxWidth="md" sx={{mt: 8, justifyContent: 'left'}}>
+            <Box sx={{padding: 4, marginTop: 4}}>
+                <Box sx={{mb: 4}}>
+                    <Box sx={{mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <Typography variant="h5" gutterBottom>
+                            Personal Information
                         </Typography>
-                    }
-                <Box sx={{ mb: 4 }}>
-                <form onSubmit={onSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="name"
-                        label={"Name"}
-                        name="name"
-                        autoComplete="name"
-                        autoFocus
-                        disabled={!isPersonalInfoEditable}
-                        {...register('name', { required: true })}
-                    />
-                    {
-                        errors.name &&
-                        <Typography variant="body2" color="red">
-                            This field is required
-                        </Typography>
-                    }
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="firstLastName"
-                        label={"First Last Name"}
-                        name="lastname"
-                        autoComplete="lastname"
-                        autoFocus
-                        disabled={!isPersonalInfoEditable}
-                        {...register('firstLastName', { required: true })}
-                    />
-                    {
-                        errors.firstLastName &&
-                        <Typography variant="body2" color="red">
-                            This field is required
-                        </Typography>
-                    }
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="secondLastName"
-                        label={"Second Last Name"}
-                        name="lastname"
-                        autoComplete="lastname"
-                        autoFocus
-                        disabled={!isPersonalInfoEditable}
-                        {...register('secondLastName', { required: true })}
-                    />
-                    {
-                        errors.secondLastName &&
-                        <Typography variant="body2" color="red">
-                            This field is required
-                        </Typography>
-                    }
-                    <TextField
-                        variant={"outlined"}
-                        margin={"normal"}
-                        fullWidth
-                        id={"curp"}
-                        label={"CURP"}
-                        name={"curp"}
-                        autoComplete={"curp"}
-                        autoFocus
-                        disabled={true}
-                    />
-                    <TextField
-                        variant={"outlined"}
-                        margin={"normal"}
-                        fullWidth
-                        id={"birthDate"}
-                        label={"Birth Date"}
-                        type={"date"}
-                        name={"birthDate"}
-                        autoComplete={"birthDate"}
-                        autoFocus
-                        disabled={!isPersonalInfoEditable}
-                        {...register('birthDate', { required: true })}
-                    />
-                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', gap: 2 }}>
                         <Button
-                            variant="contained"
-                            color="secondary"
-                            style={{ display: showButtons ? 'inline-block' : 'none' }}
-                            onClick={handleCancel}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="submit"
+                            type="button"
                             variant="contained"
                             color="primary"
-                            style={{ display: showButtons ? 'inline-block' : 'none' }}
+                            onClick={togglePersonalInfoEditable}
+                            disabled={isPersonalInfoEditable}
+                            sx={{fontSize: '1rem'}}
                         >
-                            Save
+                            Edit
                         </Button>
                     </Box>
-                </form>
-                </Box>
-                    <Divider />
-                </Box>
-                <Box sx={{ mb: 4 }}>
-                {/* School Information */}
-                <Typography variant="h6" gutterBottom>
-                        School Information
-                </Typography>
-                <form>
+                    {
+                        ScholarErrors &&
+                        <Alert severity="error" sx={{mb: 2}}>
+                            {ScholarErrors}
+                        </Alert>
+                    }
+                    <form onSubmit={onSubmit}>
                         <TextField
                             variant="outlined"
                             margin="normal"
                             fullWidth
-                            id="educationLevel"
-                            label="Education Level"
-                            name="educationLevel"
-                            autoComplete="educationLevel"
-                            autoFocus
-                            disabled={true}
+                            id="name"
+                            label="Name"
+                            name="name"
+                            autoComplete="name"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            InputProps={{
+                                style: {color: 'black', fontSize: '1rem'},
+                                readOnly: !isPersonalInfoEditable
+                            }}
+                            sx={{mb: 2}}
+                            {...register('name', {required: true})}
                         />
-                </form>
-                </Box>
-                <Divider />
-                <Box sx={{ mt: 4 }}>
-            {/* Tutor Information */}
-                    <Typography variant="h6" gutterBottom>
+                        {
+                            errors.name &&
+                            <Typography variant="body2" color="error" sx={{mt: 1}}>
+                                This field is required
+                            </Typography>
+                        }
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            id="firstLastName"
+                            label="First Last Name"
+                            name="lastname"
+                            autoComplete="lastname"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            InputProps={{
+                                style: {color: 'black', fontSize: '1rem'},
+                                readOnly: !isPersonalInfoEditable
+                            }}
+                            sx={{mb: 2}}
+                            {...register('firstLastName', {required: true})}
+                        />
+                        {
+                            errors.firstLastName &&
+                            <Typography variant="body2" color="error" sx={{mt: 1}}>
+                                This field is required
+                            </Typography>
+                        }
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            id="secondLastName"
+                            label="Second Last Name"
+                            name="lastname"
+                            autoComplete="lastname"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            InputProps={{
+                                style: {color: 'black', fontSize: '1rem'},
+                                readOnly: !isPersonalInfoEditable
+                            }}
+                            sx={{mb: 2}}
+                            {...register('secondLastName', {required: true})}
+                        />
+                        {
+                            errors.secondLastName &&
+                            <Typography variant="body2" color="error" sx={{mt: 1}}>
+                                This field is required
+                            </Typography>
+                        }
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            id="curp"
+                            label="CURP"
+                            name="curp"
+                            autoComplete="curp"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            InputProps={{
+                                style: {color: 'black'},
+                                readOnly: true
+                            }}
+                            sx={{mb: 2}}
+                            {...register('curp', {required: true})}
+                        />
+                        <Box sx={{mb: 4, display: 'flex', justifyContent: 'center', gap: 2}}>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                sx={{display: showButtons ? 'block' : 'none'}}
+                                onClick={handleCancel}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                sx={{display: showButtons ? 'block' : 'none'}}
+                            >
+                                Save
+                            </Button>
+                        </Box>
+                    </form>
+                    <Divider />
+                    {/* Scholar Information */}
+                    <Typography variant="h5" gutterBottom sx={{mt: 4}}>
+                        School Information
+                    </Typography>
+                    <TextField
+                        variant={"outlined"}
+                        margin={"normal"}
+                        fullWidth
+                        id={"educationLevel"}
+                        label={"Education Level"}
+                        name={"educationLevel"}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            style: {color: 'black'},
+                            readOnly: true
+                        }}
+                        sx={{mb: 4}}
+                    />
+                    <Divider />
+                    <Typography variant={"h5"} gutterBottom sx={{mt: 4}}>
                         Tutor Information
                     </Typography>
-                <form>
                     <TextField
-                        variant="outlined"
-                        margin="normal"
+                        variant={"outlined"}
+                        margin={"normal"}
                         fullWidth
-                        id="tutorName"
-                        label="Tutor Name"
-                        name="tutorName"
-                        autoComplete="tutorName"
-                        autoFocus
-                        disabled={true}
+                        id={"tutor"}
+                        label={"Tutor"}
+                        name={"tutor"}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            style: {color: 'black'},
+                            readOnly: true
+                        }}
+                        sx={{mb: 4}}
                     />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="tutorFirstLastName"
-                        label="Tutor First Last Name"
-                        name="tutorFirstLastName"
-                        autoComplete="tutorFirstLastName"
-                        autoFocus
-                        disabled={true}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="tutorSecondLastName"
-                        label="Tutor Second Last Name"
-                        name="tutorSecondLastName"
-                        autoComplete="tutorSecondLastName"
-                        autoFocus
-                        disabled={true}
-                    />
-                </form>
+
                 </Box>
-            </Paper>
+            </Box>
         </Container>
     );
 }
 
-export default ScholarProfile;
+    export default ScholarProfile;
