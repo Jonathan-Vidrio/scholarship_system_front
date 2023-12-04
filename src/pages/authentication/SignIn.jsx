@@ -2,12 +2,9 @@ import {
     Alert,
     Button,
     Container,
-    Paper,
     TextField,
     Typography,
-    Link,
-    FormControl,
-    FormControlLabel
+    Link
 } from "@mui/material";
 import {useForm} from 'react-hook-form'
 import {useAuthentication} from "../../context/AuthenticationContext.jsx";
@@ -119,9 +116,11 @@ const SignIn = () => {
                     Sign In
                 </Button>
             </form>
+            {/*
             <Link href={"/recovery-password"} variant="body2" sx={{mt: 2}}>
                 Forgot password?
             </Link>
+            */}
             <Link href={"/signup/verify"} variant="body2" sx={{mt: 2}}>
                 Don't have an account? Sign Up
             </Link>

@@ -126,7 +126,7 @@ const enableTutor = async (id, token) => {
     });
 }
 
-const removeTotur = async (id, token) => {
+const removeTutor = async (id, token) => {
     return fetch(API_URL + id, {
         method: 'DELETE',
         headers: {
@@ -150,5 +150,5 @@ export {
     putTutor,
     disableTutor,
     enableTutor,
-    removeTotur
+    removeTutor
 }

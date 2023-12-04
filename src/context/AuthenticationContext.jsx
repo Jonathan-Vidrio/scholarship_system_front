@@ -51,8 +51,13 @@ const AuthenticationProvider = ({ children }) => {
     const verifyRegister = async (values) => {
         try {
             const res = await verifyScholar(values);
-            if (res.scholar) {
-                setIsVerified(true);
+            if (res.data[0]) {
+                console.log(res.data[0]);
+                if (res.data[0].userId) {
+                    throw new Error("User already verified");
+                } else {
+                    setIsVerified(true);
+                }
             } else {
                 setErrors(res.message);
             }

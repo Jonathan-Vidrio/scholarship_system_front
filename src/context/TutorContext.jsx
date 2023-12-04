@@ -1,4 +1,13 @@
 import {createContext, useContext, useState} from "react";
+import {
+    disableTutor, enableTutor,
+    getAllTutors,
+    getDisabledTutors,
+    getTutorById,
+    getTutorsByFilter,
+    postTutor,
+    putTutor
+} from "../api/tutor.js";
 
 const TutorContext = createContext();
 
@@ -18,8 +27,8 @@ const TutorProvider = ({children}) => {
     const getAll = async (token) => {
         try {
             const res = await getAllTutors(token);
-            if (res) {
-                setTutors(res);
+            if (res.data) {
+                setTutors(res.data);
             } else {
                 setErrors(res.message);
             }
@@ -28,11 +37,11 @@ const TutorProvider = ({children}) => {
         }
     }
 
-    const getDisabled = async () => {
+    const getDisabled = async (token) => {
         try {
-            const res = await getDisabledTutors();
-            if (res) {
-                setTutors(res);
+            const res = await getDisabledTutors(token);
+            if (res.data) {
+                setTutors(res.data);
             } else {
                 setErrors(res.message);
             }
@@ -41,11 +50,102 @@ const TutorProvider = ({children}) => {
         }
     }
 
-    const getByFilter = async (values) => {
+    const getByFilter = async (values, token) => {
         try {
-            const res = await getTutorsByFilter(values);
-            if (res) {
-                setTutors(res);
+            const res = await getTutorsByFilter(values, token);
+            if (res.data) {
+                setTutors(res.data);
+            } else {
+                setErrors(res.message);
+            }
+        } catch (error) {
+            setErrors(error.message);
+        }
+    }
+
+    const getById = async (id, token) => {
+        try {
+            const res = await getTutorById(id, token);
+            if (res.data) {
+                setTutor(res.data);
+            } else {
+                setErrors(res.message);
+            }
+        } catch (error) {
+            setErrors(error.message);
+        }
+    }
+
+    const getByWorkerId = async (id, token) => {
+        try {
+            const res = await getTutorById(id, token);
+            if (res.data) {
+                setTutor(res.data);
+            } else {
+                setErrors(res.message);
+            }
+        } catch (error) {
+            setErrors(error.message);
+        }
+    }
+
+    const post = async (values, token) => {
+        try {
+            const res = await postTutor(values, token);
+            if (res.data) {
+                setTutor(res.data);
+            } else {
+                setErrors(res.message);
+            }
+        } catch (error) {
+            setErrors(error.message);
+        }
+    }
+
+    const put = async (id, values, token) => {
+        try {
+            const res = await putTutor(id, values, token);
+            if (res.data) {
+                setTutor(res.data);
+            } else {
+                setErrors(res.message);
+            }
+        } catch (error) {
+            setErrors(error.message);
+        }
+    }
+
+    const disable = async (id, token) => {
+        try {
+            const res = await disableTutor(id, token);
+            if (res.status === 204) {
+                setTutor(null);
+            } else {
+                setErrors(res.message);
+            }
+        } catch (error) {
+            setErrors(error.message);
+        }
+    }
+
+    const enable = async (id, token) => {
+        try {
+            const res = await enableTutor(id, token);
+            if (res.status === 204) {
+                setTutor(null);
+            } else {
+                setErrors(res.message);
+            }
+        } catch (error) {
+            setErrors(error.message);
+        }
+    }
+
+    const remove = async (id, token) => {
+        try {
+            const res = await disableTutor(id, token);
+            if (res.status === 204) {
+                setTutor(null);
             } else {
                 setErrors(res.message);
             }
@@ -61,7 +161,17 @@ const TutorProvider = ({children}) => {
             tutor,
             setTutor,
             errors,
-            setErrors
+            setErrors,
+            getAll,
+            getDisabled,
+            getByFilter,
+            getById,
+            getByWorkerId,
+            post,
+            put,
+            disable,
+            enable,
+            remove
         }}>
             {children}
         </TutorContext.Provider>

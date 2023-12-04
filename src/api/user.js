@@ -99,8 +99,8 @@ const postUser = async (user, token) => {
     });
 }
 
-const putUser = async (user, token) => {
-    return fetch(API_URL + user._id, {
+const putUser = async (id, user, token) => {
+    return fetch(API_URL + id, {
         method: 'PUT',
         body: JSON.stringify(user),
         headers: {

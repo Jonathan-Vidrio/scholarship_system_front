@@ -1,9 +1,10 @@
-import {createContext, useState} from "react";
+import {createContext, useContext, useState} from "react";
 import {
+    disableScholarship, enableScholarship,
     getAllScholarships,
     getDisabledScholarships, getScholarshipById,
     getScholarshipsByFilter,
-    postScholarship, putScholarship
+    postScholarship, putScholarship, removeScholarship
 } from "../api/scholarship.js";
 
 const ScholarshipContext = createContext();
@@ -26,8 +27,8 @@ const ScholarshipProvider = ({ children }) => {
     const getAll = async (token) => {
         try {
             const res = await getAllScholarships(token);
-            if (res) {
-                setScholarships(res);
+            if (res.data) {
+                setScholarships(res.data);
             } else {
                 setErrors(res.message);
             }
@@ -39,8 +40,8 @@ const ScholarshipProvider = ({ children }) => {
     const getDisabled = async (token) => {
         try {
             const res = await getDisabledScholarships(token);
-            if (res) {
-                setScholarships(res);
+            if (res.data) {
+                setScholarships(res.data);
             } else {
                 setErrors(res.message);
             }
@@ -52,8 +53,8 @@ const ScholarshipProvider = ({ children }) => {
     const getByFilter = async (filter, token) => {
         try {
             const res = await getScholarshipsByFilter(filter, token);
-            if (res) {
-                setScholarships(res);
+            if (res.data) {
+                setScholarships(res.data);
             } else {
                 setErrors(res.message);
             }
@@ -65,8 +66,8 @@ const ScholarshipProvider = ({ children }) => {
     const getById = async (scholarshipId, token) => {
         try {
             const res = await getScholarshipById(scholarshipId, token);
-            if (res) {
-                setScholarship(res);
+            if (res.data) {
+                setScholarship(res.data);
             } else {
                 setErrors(res.message);
             }
@@ -78,8 +79,8 @@ const ScholarshipProvider = ({ children }) => {
     const post = async (scholarship, token) => {
         try {
             const res = await postScholarship(scholarship, token);
-            if (res) {
-                setScholarship(res);
+            if (res.data) {
+                setScholarship(res.data);
             } else {
                 setErrors(res.message);
             }
@@ -91,8 +92,8 @@ const ScholarshipProvider = ({ children }) => {
     const put = async (id, scholarship, token) => {
         try {
             const res = await putScholarship(id, scholarship, token);
-            if (res) {
-                setScholarship(res);
+            if (res.data) {
+                setScholarship(res.data);
             } else {
                 setErrors(res.message);
             }
@@ -104,8 +105,8 @@ const ScholarshipProvider = ({ children }) => {
     const disable = async (id, token) => {
         try {
             const res = await disableScholarship(id, token);
-            if (res) {
-                setScholarship(res);
+            if (res.status === 204) {
+                setScholarship(null);
             } else {
                 setErrors(res.message);
             }
@@ -117,8 +118,8 @@ const ScholarshipProvider = ({ children }) => {
     const enable = async (id, token) => {
         try {
             const res = await enableScholarship(id, token);
-            if (res) {
-                setScholarship(res);
+            if (res.status === 204) {
+                setScholarship(null);
             } else {
                 setErrors(res.message);
             }
@@ -130,8 +131,8 @@ const ScholarshipProvider = ({ children }) => {
     const remove = async (id, token) => {
         try {
             const res = await removeScholarship(id, token);
-            if (res) {
-                setScholarship(res);
+            if (res.status === 204) {
+                setScholarship(null);
             } else {
                 setErrors(res.message);
             }
@@ -161,4 +162,10 @@ const ScholarshipProvider = ({ children }) => {
             {children}
         </ScholarshipContext.Provider>
     );
+}
+
+export {
+    ScholarshipContext,
+    ScholarshipProvider,
+    useScholarshipContext
 }

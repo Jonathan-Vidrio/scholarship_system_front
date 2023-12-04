@@ -4,8 +4,8 @@ const getAllScholars = async (token) => {
     return fetch(API_URL, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -18,7 +18,8 @@ const getDisabledScholars = async (token) => {
     return fetch(API_URL + '/disabled', {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -31,7 +32,8 @@ const getScholarsByFilter = async (filter, token) => {
     return fetch(API_URL + '/filter' + filter, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -44,7 +46,8 @@ const getScholarByTutorId = async (tutorId, token) => {
     return fetch(API_URL + '/tutor/' + tutorId, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -57,7 +60,8 @@ const getScholarById = async (scholarId, token) => {
     return fetch(API_URL + scholarId, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -70,7 +74,8 @@ const getScholarByCurp = async (curp, token) => {
     return fetch(API_URL + '/curp/' + curp, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -83,8 +88,8 @@ const getScholarByUserId = async (userId, token) => {
     return fetch(API_URL + '/user/' + userId, {
         method: 'GET',
         headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -93,12 +98,13 @@ const getScholarByUserId = async (userId, token) => {
     });
 }
 
-const postScholar = async (scholar) => {
+const postScholar = async (scholar, token) => {
     return fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify(scholar),
         headers: {
-        'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -112,8 +118,8 @@ const putScholar = async (id, scholar, token) => {
         method: 'PUT',
         body: JSON.stringify(scholar),
         headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
         return response.json();
@@ -122,40 +128,43 @@ const putScholar = async (id, scholar, token) => {
     });
 }
 
-const disableScholar = async (scholarId) => {
+const disableScholar = async (scholarId, token) => {
     return fetch(API_URL + '/disable/' + scholarId, {
         method: 'DELETE',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
-        return response.json();
+        return response.status;
     }).catch(() => {
         return { message: 'Connection failed' }
     });
 }
 
-const enableScholar = async (scholarId) => {
+const enableScholar = async (scholarId, token) => {
     return fetch(API_URL + '/enable/' + scholarId, {
         method: 'PATCH',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
-        return response.json();
+        return response.status;
     }).catch(() => {
         return { message: 'Connection failed' }
     });
 }
 
-const deleteScholar = async (scholarId) => {
+const deleteScholar = async (scholarId, token) => {
     return fetch(API_URL + scholarId, {
         method: 'DELETE',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     }).then(response => {
-        return response.json();
+        return response.status;
     }).catch(() => {
         return { message: 'Connection failed' }
     });

@@ -87,14 +87,14 @@ const putScholarship = async (id ,scholarship, token) => {
 }
 
 const disableScholarship = async (id, token) => {
-    return fecth(API_URL + 'disable/' + id, {
+    return fetch(API_URL + 'disable/' + id, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token,
         }
     }).then(response => {
-        return response.json();
+        return response.status;
     }).catch(() => {
         return { message: 'Connection failed' }
     });
@@ -108,7 +108,7 @@ const enableScholarship = async (id, token) => {
             'Authorization': 'Bearer ' + token,
         }
     }).then(response => {
-        return response.json();
+        return response.status;
     }).catch(() => {
         return { message: 'Connection failed' }
     });
@@ -122,7 +122,7 @@ const removeScholarship = async (id, token) => {
             'Authorization': 'Bearer ' + token,
         }
     }).then(response => {
-        return response.json();
+        return response.status;
     }).catch(() => {
         return { message: 'Connection failed' }
     });
