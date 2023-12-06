@@ -1,25 +1,17 @@
-import {createContext, useContext, useState} from "react";
-import {
-    disableUser, enableUser,
-    getAllUsers,
-    getDisabledUsers,
-    getUserByEmail,
-    getUserById,
-    getUsersByFilter,
-    getUsersByRole, postUser, putUser, removeUser
-} from "../api/user.js";
+import { createContext, useContext, useState } from "react";
+import { disableUser, enableUser, getAllUsers, getDisabledUsers, getUserByEmail, getUserById, getUsersByFilter, getUsersByRole, postUser, putUser, removeUser } from "../api/user.js";
 
 const UserContext = createContext();
 
 const useUser = () => {
     const context = useContext(UserContext);
     if (!context) {
-        throw new Error('useUser must be used within a UserProvider');
+        throw new Error("useUser must be used within a UserProvider");
     }
     return context;
 }
 
-const UserProvider = ({children}) => {
+const UserProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
     const [user, setUser] = useState(null);
     const [errors, setErrors] = useState(null);
@@ -29,11 +21,15 @@ const UserProvider = ({children}) => {
             const res = await getAllUsers(token);
             if (res.data) {
                 setUsers(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -42,24 +38,32 @@ const UserProvider = ({children}) => {
             const res = await getDisabledUsers(token);
             if (res.data) {
                 setUsers(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
-    const getByFilter = async (values, token) => {
+    const getByFilter = async (filter, token) => {
         try {
-            const res = await getUsersByFilter(values, token);
+            const res = await getUsersByFilter(filter, token);
             if (res.data) {
                 setUsers(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -68,11 +72,15 @@ const UserProvider = ({children}) => {
             const res = await getUsersByRole(role, token);
             if (res.data) {
                 setUsers(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -81,11 +89,15 @@ const UserProvider = ({children}) => {
             const res = await getUserById(id, token);
             if (res.data) {
                 setUser(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -94,37 +106,49 @@ const UserProvider = ({children}) => {
             const res = await getUserByEmail(email, token);
             if (res.data) {
                 setUser(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
-    const post = async (values, token) => {
+    const post = async (user, token) => {
         try {
-            const res = await postUser(values, token);
+            const res = await postUser(user, token);
             if (res.data) {
                 setUser(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
-    const put = async (id, values, token) => {
+    const put = async (id, user, token) => {
         try {
-            const res = await putUser(id, values, token);
+            const res = await putUser(id, user, token);
             if (res.data) {
                 setUser(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -133,11 +157,15 @@ const UserProvider = ({children}) => {
             const res = await disableUser(id, token);
             if (res.status === 204) {
                 setUser(null);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -146,11 +174,15 @@ const UserProvider = ({children}) => {
             const res = await enableUser(id, token);
             if (res.status === 204) {
                 setUser(null);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -159,11 +191,15 @@ const UserProvider = ({children}) => {
             const res = await removeUser(id, token);
             if (res.status === 204) {
                 setUser(null);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -185,7 +221,7 @@ const UserProvider = ({children}) => {
             put,
             disable,
             enable,
-            remove
+            remove,
         }}>
             {children}
         </UserContext.Provider>
@@ -194,5 +230,5 @@ const UserProvider = ({children}) => {
 
 export {
     useUser,
-    UserProvider
+    UserProvider,
 }

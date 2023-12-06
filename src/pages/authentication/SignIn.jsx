@@ -1,11 +1,4 @@
-import {
-    Alert,
-    Button,
-    Container,
-    TextField,
-    Typography,
-    Link
-} from "@mui/material";
+import {Alert, Button, Container, Link, TextField, Typography} from "@mui/material";
 import {useForm} from 'react-hook-form'
 import {useAuthentication} from "../../context/AuthenticationContext.jsx";
 import {useNavigate} from "react-router-dom";
@@ -36,10 +29,13 @@ const SignIn = () => {
 
     useEffect(() => {
         if (isAuthenticated && (user.roleId === 1 || user.roleId === 2)) {
-            navigate('/admin');
+            getByUserId(user.id, token).then(() => {
+                navigate('/admin');
+            });
         } else if (isAuthenticated && user.roleId === 3) {
-            getByUserId(user.id, token);
-            navigate('/scholar');
+            getByUserId(user.id, token).then(() => {
+                navigate('/scholar');
+            });
         }
 
         return () => {

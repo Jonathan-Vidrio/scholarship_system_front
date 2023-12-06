@@ -14,28 +14,26 @@ const SuperadminNavbar = () => {
         navigate('/');
     }
 
-    return (
-        <AppBar>
-            <Toolbar>
-                <Grid container justifyContent="space-between" alignItems="center">
-                    <Grid item>
-                        <Button color="inherit" component={Link} to={"/admin/users"}>Users</Button>
-                        <Button color="inherit" component={Link} to="/admin/scholars">Scholars</Button>
-                        <Button color="inherit" component={Link} to="/admin/tutors">Tutors</Button>
-                        <Button color="inherit" component={Link} to="/admin/scholarchips">Scholarships</Button>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="h6" color="inherit" component="div">
-                            Scholarship System
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Button color="inherit" component={Link} to="/signin" onClick={onLogout}>Sign Out</Button>
-                    </Grid>
+    return (<AppBar>
+        <Toolbar>
+            <Grid container justifyContent="space-between" alignItems="center">
+                <Grid item>
+                    <Button color="inherit" component={Link} to={"/admin/users"}>Users</Button>
+                    <Button color="inherit" component={Link} to="/admin/scholars">Scholars</Button>
+                    <Button color="inherit" component={Link} to="/admin/tutors">Tutors</Button>
+                    <Button color="inherit" component={Link} to="/admin/scholarships">Scholarships</Button>
                 </Grid>
-            </Toolbar>
-        </AppBar>
-    );
+                <Grid item>
+                    <Typography variant="h6" color="inherit" component="div">
+                        Scholarship System
+                    </Typography>
+                </Grid>
+                <Grid item>
+                    <Button color="inherit" component={Link} to="/signin" onClick={onLogout}>Sign Out</Button>
+                </Grid>
+            </Grid>
+        </Toolbar>
+    </AppBar>);
 }
 
 export default SuperadminNavbar;

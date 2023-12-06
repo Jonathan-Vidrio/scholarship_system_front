@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from "react";
 import {ScholarContext} from "../../../context/ScholarContext.jsx";
 import {
     Box, Button,
-    Container, Paper,
+    Container,
     Table,
     TableBody,
     TableCell,
@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import {useAuthentication} from "../../../context/AuthenticationContext.jsx";
 import {useNavigate} from "react-router-dom";
-import {Add} from "@mui/icons-material";
+import {Add, Edit, FeaturedPlayList} from "@mui/icons-material";
 
 const IndexScholars = () => {
     const {
@@ -30,13 +30,29 @@ const IndexScholars = () => {
     const navigate = useNavigate();
 
     const columns = [
-        {title: 'Name', field: 'name',},
-        {title: 'First Last Name', field: 'firstLastName',},
-        {title: 'Second Last Name', field: 'secondLastName',},
+        {title: 'Full Name', field: 'fullName', render: (rowData) => `${rowData.name} ${rowData.firstLastName} ${rowData.secondLastName}`},
         {title: 'CURP', field: 'curp',},
         {title: 'Tutor', field: 'tutorId',},
         {title: 'Education Level', field: 'educationLevelId',},
         {title: 'Scholarship', field: 'scholarshipId',}
+    ];
+
+    const modifiedColumns = [
+        {
+            title: 'Actions',
+            field: 'actions',
+            render: (rowData) => (
+                <Box>
+                    <Button onClick={() => handleDetails(rowData.id)}>
+                        <FeaturedPlayList />
+                    </Button>
+                    <Button onClick={() => handleEdit(rowData.id)}>
+                        <Edit />
+                    </Button>
+                </Box>
+            ),
+        },
+        ...columns
     ];
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -61,7 +77,14 @@ const IndexScholars = () => {
         setPage(0);
     };
 
-    // Filter scholars based on search query
+    const handleDetails = (scholarId) => {
+        console.log(`Ver detalles del scholar con ID: ${scholarId}`);
+    };
+
+    const handleEdit = (scholarId) => {
+        console.log(`Editar scholar con ID: ${scholarId}`);
+    };
+
     const filteredScholars = searchQuery
         ? scholars.filter((scholar) =>
             Object.values(scholar).some((value) =>
@@ -106,15 +129,14 @@ const IndexScholars = () => {
                         Add New
                     </Button>
                 </Box>
-                <Paper>
                     <TableContainer>
                         <Table stickyHeader>
                             <TableHead>
                                 <TableRow>
-                                    {columns.map((column) => (
+                                    {modifiedColumns.map((column) => (
                                         <TableCell
                                             key={column.field}
-                                            align={column.align}
+                                            align={column.align || 'center'}
                                             style={{minWidth: column.minWidth}}
                                         >
                                             {column.title}
@@ -126,13 +148,11 @@ const IndexScholars = () => {
                                 {rowsToDisplay.map((row) => {
                                     return (
                                         <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                            {columns.map((column) => {
+                                            {modifiedColumns.map((column) => {
                                                 const value = row[column.field];
                                                 return (
-                                                    <TableCell key={column.field} align={column.align}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
+                                                    <TableCell key={column.field} align={column.align || 'center'}>
+                                                        {column.render ? column.render(row) : value}
                                                     </TableCell>
                                                 );
                                             })}
@@ -151,7 +171,6 @@ const IndexScholars = () => {
                         onPageChange={handleChangePage}
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
-                </Paper>
             </Container>
         </>
     );

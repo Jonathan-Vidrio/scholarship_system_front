@@ -15,10 +15,12 @@ import {useAuthentication} from "../../../context/AuthenticationContext.jsx";
 import {useScholar} from "../../../context/ScholarContext.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import {useScholarship} from "../../../context/ScholarshipContext.jsx";
 
 const CreateScholar = () => {
-    const [scholarship, setScholarship] = useState('');
+    const [scholarshipSelected, setScholarshipSelected] = useState('');
     const [educationLevel, setEducationLevel] = useState('');
+    const [scholarshipList, setScholarshipList] = useState([]);
     const navigate = useNavigate();
 
     const {
@@ -40,15 +42,26 @@ const CreateScholar = () => {
         post,
     } = useScholar();
 
-    useEffect(() => {
+    const {
+        getAll,
+    } = useScholarship();
+
+    const getValues = async () => {
+        const scholarships = await getAll(token);
+        if (scholarships) {
+            setScholarshipList(scholarships);
+        } else {
+            setErrors('Error loading scholarships');
+        }
+    }
+
+    useEffect( () => {
         if (!isAuthenticated || (user.roleId !== 1 && user.roleId !== 2)) {
             navigate('*');
+        } else {
+            getValues();
         }
-
-        return () => {
-            setErrors(null);
-        }
-    }, [isAuthenticated, user, navigate, setErrors]);
+    }, [isAuthenticated, user, navigate]);
 
     const onSubmit = handleSubmit(async (values) => {
         const data = {
@@ -58,7 +71,7 @@ const CreateScholar = () => {
             curp: values.curp,
             birthdate: values.birthdate,
             educationLevel: educationLevel,
-            scholarshipId: scholarship,
+            scholarshipId: scholarshipSelected,
             tutorId: Number(values.tutorId),
         }
 
@@ -71,7 +84,7 @@ const CreateScholar = () => {
     return (
         <>
             <Container component={"main"} maxWidth={"md"} sx={{mt: 8}}>
-                <Box sx={{padding: 4, marginTop: 4}}>
+                <Box sx={{padding: 4, mt: 4}}>
                     <Typography variant={"h5"} gutterBottom>
                         Add New Scholar
                     </Typography>
@@ -195,6 +208,7 @@ const CreateScholar = () => {
                                 <MenuItem value={1}>Primary</MenuItem>
                                 <MenuItem value={2}>Secondary</MenuItem>
                                 <MenuItem value={3}>High School</MenuItem>
+                                <MenuItem value={4}>University</MenuItem>
                             </Select>
                         </FormControl>
                         {
@@ -203,21 +217,23 @@ const CreateScholar = () => {
                                 This field is required
                             </Typography>
                         }
-                        <FormControl sx={{mt: 2}} fullWidth>
-                            <InputLabel id={"scholarshipId"}>
-                                Scholarship
-                            </InputLabel>
+                        <FormControl sx={{ mt: 2 }} fullWidth>
+                            <InputLabel id="scholarshipId">Scholarship</InputLabel>
                             <Select
-                                labelId={"scholarshipId-label"}
-                                id={"scholarshipId"}
+                                labelId="scholarshipId-label"
+                                id="scholarshipId"
                                 {...register('scholarshipId')}
-                                value={scholarship}
-                                onChange={(e) => setScholarship(e.target.value)}
-                                label={"Scholarship"}
+                                value={scholarshipSelected}
+                                onChange={(e) => setScholarshipSelected(e.target.value)}
+                                label="Scholarship"
                             >
-                                <MenuItem value={1}>Scholarship 1</MenuItem>
-                                <MenuItem value={2}>Scholarship 2</MenuItem>
-                                <MenuItem value={3}>Scholarship 3</MenuItem>
+                                {
+                                    scholarshipList.map((scholarship) => (
+                                        <MenuItem key={scholarship.id} value={scholarship.id}>
+                                            {scholarship.name}
+                                        </MenuItem>
+                                    ))
+                                }
                             </Select>
                         </FormControl>
 

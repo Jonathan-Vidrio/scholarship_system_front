@@ -1,20 +1,12 @@
-import {createContext, useContext, useState} from "react";
-import {
-    disableScholarship, enableScholarship,
-    getAllScholarships,
-    getDisabledScholarships, getScholarshipById,
-    getScholarshipsByFilter,
-    postScholarship, putScholarship, removeScholarship
-} from "../api/scholarship.js";
+import { createContext, useContext, useState } from "react";
+import { disableScholarship, enableScholarship, getAllScholarships, getDisabledScholarships, getScholarshipById, getScholarshipsByFilter, postScholarship, putScholarship, removeScholarship } from "../api/scholarship.js";
 
 const ScholarshipContext = createContext();
 
-const useScholarshipContext = () => {
+const useScholarship = () => {
     const context = useContext(ScholarshipContext);
     if (!context) {
-        throw new Error(
-            "ScholarshipContext must be used within a ScholarshipProvider"
-        );
+        throw new Error("ScholarshipContext must be used within a ScholarshipProvider");
     }
     return context;
 }
@@ -22,18 +14,22 @@ const useScholarshipContext = () => {
 const ScholarshipProvider = ({ children }) => {
     const [scholarships, setScholarships] = useState([]);
     const [scholarship, setScholarship] = useState(null);
-    const [errors, setErrors] = useState(null);
+    const [errors, setErrors] = useState([]);
 
     const getAll = async (token) => {
         try {
             const res = await getAllScholarships(token);
             if (res.data) {
                 setScholarships(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -42,11 +38,15 @@ const ScholarshipProvider = ({ children }) => {
             const res = await getDisabledScholarships(token);
             if (res.data) {
                 setScholarships(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -55,11 +55,15 @@ const ScholarshipProvider = ({ children }) => {
             const res = await getScholarshipsByFilter(filter, token);
             if (res.data) {
                 setScholarships(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -68,11 +72,15 @@ const ScholarshipProvider = ({ children }) => {
             const res = await getScholarshipById(scholarshipId, token);
             if (res.data) {
                 setScholarship(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -81,24 +89,32 @@ const ScholarshipProvider = ({ children }) => {
             const res = await postScholarship(scholarship, token);
             if (res.data) {
                 setScholarship(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
-            setErrors(error.message);
+            return res;
         }
-    }
+        catch (error) {
+            setErrors(error.message);
+            throw error;
+        }
+    };
 
     const put = async (id, scholarship, token) => {
         try {
             const res = await putScholarship(id, scholarship, token);
             if (res.data) {
                 setScholarship(res.data);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -107,11 +123,15 @@ const ScholarshipProvider = ({ children }) => {
             const res = await disableScholarship(id, token);
             if (res.status === 204) {
                 setScholarship(null);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -120,11 +140,15 @@ const ScholarshipProvider = ({ children }) => {
             const res = await enableScholarship(id, token);
             if (res.status === 204) {
                 setScholarship(null);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -133,11 +157,15 @@ const ScholarshipProvider = ({ children }) => {
             const res = await removeScholarship(id, token);
             if (res.status === 204) {
                 setScholarship(null);
-            } else {
+            }
+            else {
                 setErrors(res.message);
             }
-        } catch (error) {
+            return res;
+        }
+        catch (error) {
             setErrors(error.message);
+            throw error;
         }
     }
 
@@ -157,7 +185,7 @@ const ScholarshipProvider = ({ children }) => {
             put,
             disable,
             enable,
-            remove
+            remove,
         }}>
             {children}
         </ScholarshipContext.Provider>
@@ -165,7 +193,5 @@ const ScholarshipProvider = ({ children }) => {
 }
 
 export {
-    ScholarshipContext,
-    ScholarshipProvider,
-    useScholarshipContext
+    ScholarshipContext, ScholarshipProvider, useScholarship,
 }
